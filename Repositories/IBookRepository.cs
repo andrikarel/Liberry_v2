@@ -6,5 +6,7 @@ namespace Liberry_v2.Repositories{
     public interface IBookRepository
     {
         bool addBook(List<BookDTO> bookDTO);
+        bool addUser(List<UserDTO> users);
+        bool addLoan(List<LoanDTO> loans);
     }
 }

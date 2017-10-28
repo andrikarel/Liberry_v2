@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace Liberry_v2.Models.ViewModels
@@ -6,15 +7,18 @@ namespace Liberry_v2.Models.ViewModels
     public class UserViewModel
     {
         [Required]
-        public int ID { get; set; }
+        public int vinur_id { get; set; }
         [Required]
-        public String Name  { get; set; }
+        public String fornafn  { get; set; }
         [Required]
-        public String Address {get; set; }
+        public String eftirnafn  { get; set; }
+      
+        public String heimilisfang {get; set; }
         [Required]
-        public String Email { get; set; }
-        [Required]
-        public String ISBN { get; set; }
+        public String netfang { get; set; }
+        
+        public List<LoanViewModel> lanasafn {get; set;}
+      
 
     }
 }

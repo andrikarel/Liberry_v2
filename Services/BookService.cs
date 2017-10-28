@@ -19,18 +19,9 @@ namespace Liberry_v2.Services
 
         public bool AddBook(List<BookViewModel> book)
         {
-            /*
-            return _repo.addBook( new BookDTO{
-                Id = book.bok_id,
-                Title = book.bok_titill,
-                Author = book.fornafn_hofundar + ", " + book.eftirnafn_hofundar,
-                Published = book.utgafudagur,
-                ISBN = book.ISBN
-            });
-            */
-            List<BookDTO> toParse = new List<BookDTO>();
+            List<BookDTO> toAdd = new List<BookDTO>();
             foreach(BookViewModel b in book){
-                toParse.Add(new BookDTO{
+                toAdd.Add(new BookDTO{
                     Id = b.bok_id,
                     Title = b.bok_titill,
                     Author = b.fornafn_hofundar + ", " + b.eftirnafn_hofundar,
@@ -38,7 +29,43 @@ namespace Liberry_v2.Services
                     ISBN = b.ISBN
                 });
             }
-            return _repo.addBook(toParse);
+            return _repo.addBook(toAdd);
+        }
+        public bool AddUser(List<UserViewModel> user){
+            List<UserDTO> users = new List<UserDTO>();
+            List<LoanDTO> loans = new List<LoanDTO>();
+            foreach(UserViewModel u in user){
+                users.Add(new UserDTO{
+                    Id = u.vinur_id,
+                    Name = u.fornafn + ", " + u.eftirnafn,
+                    Address = u.heimilisfang,
+                    Email = u.netfang,
+                    UserType = "NormalUser"
+                    
+                });
+                Console.Write(u.lanasafn);
+                if(u.lanasafn != null){
+                    foreach(LoanViewModel l in u.lanasafn){
+                        loans.Add(new LoanDTO{
+                            BookId = l.bok_id,
+                            UserId = u.vinur_id,
+                            DateOfLoan = l.bok_lanadagsetning
+                        });
+                    }
+                }
+            }
+            bool userAdded = _repo.addUser(users);
+            
+            bool loanAdded = _repo.addLoan(loans);
+            
+            if(userAdded && loanAdded){
+                return true;
+            }
+            else{
+                return false;
+            }
+            
+
         }
     }
 }

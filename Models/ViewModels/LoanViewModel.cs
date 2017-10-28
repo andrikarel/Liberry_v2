@@ -5,15 +5,14 @@ namespace Liberry_v2.Models.ViewModels
 {
     public class LoanViewModel
     {
+        
         [Required]
-        public int Id { get; set; }
+        public int vinur_id { get; set; }
         [Required]
-        public int CustomerId { get; set; }
-        [Required]
-        public int BookId  { get; set; }
+        public int bok_id  { get; set; }
 
         [Required]
-        public DateTime LoanDate { get; set; }
+        public DateTime bok_lanadagsetning { get; set; }
 
 
     }

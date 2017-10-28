@@ -28,7 +28,6 @@ namespace Api.Controllers
         [Route("books")]
         public IActionResult AddBook([FromBody] List<BookViewModel> book)
         {
-            Console.Write(book.Count);
             if(book == null){
                 return BadRequest();
             }
@@ -75,9 +74,25 @@ namespace Api.Controllers
 
         [HttpPost]
         [Route("users")]
-        public IActionResult AddUser([FromBody] UserViewModel user)
+        public IActionResult AddUser([FromBody] List<UserViewModel> user)
         {
-            return Ok();
+            if(user == null){
+                return BadRequest();
+            }
+            if(!ModelState.IsValid){
+
+                return StatusCode(412);
+            }
+            bool valid = _bookService.AddUser(user);
+            
+            if(valid){
+                return StatusCode(201);
+            }
+            else{
+          
+
+                return StatusCode(412);
+            }
         }
 
         [HttpGet]

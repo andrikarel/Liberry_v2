@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Liberry_v2.Repositories;
+using Liberry_v2.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -26,6 +27,8 @@ namespace Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
+            services.AddTransient<IBookRepository,BookRepository>();
+            services.AddTransient<IBookService,BookService>();
             services.AddDbContext<AppDataContext>(options => options.UseSqlite("Data source=../Repositories/Liberry_v2.db",
             b => b.MigrationsAssembly("Api")));
         }

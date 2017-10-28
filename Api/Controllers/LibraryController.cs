@@ -1,15 +1,21 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Liberry_v2.Models.ViewModels;
+using Liberry_v2.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Server.Kestrel.Internal.System.Collections.Sequences;
 
 namespace Api.Controllers
 {
     [Route("")]
     public class LibraryController : Controller
     {
+        private readonly IBookService _bookService;
+        public LibraryController(IBookService bookService){
+            _bookService = bookService;
+        }
+
         // GET api/values
         [HttpGet]
         [Route("books")]
@@ -20,10 +26,24 @@ namespace Api.Controllers
 
         [HttpPost]
         [Route("books")]
-        public IActionResult AddBook([FromBody] BookViewModel book)
+        public IActionResult AddBook([FromBody] List<BookViewModel> book)
         {
-            return Ok();
+            Console.Write(book.Count);
+            if(book == null){
+                return BadRequest();
+            }
+            if(!ModelState.IsValid){
+                return StatusCode(412);
+            }
+            bool valid = _bookService.AddBook(book);
+            if(valid){
+                return StatusCode(201);
+            }
+            else{
+                return StatusCode(412);
+            }
         }
+        
 
         [HttpGet]
         [Route("books/{book_id}")]

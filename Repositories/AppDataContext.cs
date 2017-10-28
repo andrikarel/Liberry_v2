@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
-using Liberry_v2.Models.Entities;
+
+using Liberry_v2.Models.Entites;
 
 namespace Liberry_v2.Repositories
 {

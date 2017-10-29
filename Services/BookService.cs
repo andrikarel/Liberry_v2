@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using Liberry_v2.Models.DTOs;
 using Liberry_v2.Models.ViewModels;
 using Liberry_v2.Repositories;
+using Liberry_v2.Services.Exceptions;
 
 namespace Liberry_v2.Services
 {
@@ -17,7 +18,7 @@ namespace Liberry_v2.Services
             _repo = repo;
         }
 
-        public bool AddBook(List<BookViewModel> book)
+        public void AddBook(List<BookViewModel> book)
         {
             List<BookDTO> toAdd = new List<BookDTO>();
             foreach(BookViewModel b in book){
@@ -29,9 +30,9 @@ namespace Liberry_v2.Services
                     ISBN = b.ISBN
                 });
             }
-            return _repo.addBook(toAdd);
+            _repo.AddBook(toAdd);
         }
-        public bool AddUser(List<UserViewModel> user){
+        public void AddUser(List<UserViewModel> user){
             List<UserDTO> users = new List<UserDTO>();
             List<LoanDTO> loans = new List<LoanDTO>();
             foreach(UserViewModel u in user){
@@ -54,18 +55,37 @@ namespace Liberry_v2.Services
                     }
                 }
             }
-            bool userAdded = _repo.addUser(users);
-            
-            bool loanAdded = _repo.addLoan(loans);
-            
-            if(userAdded && loanAdded){
-                return true;
-            }
-            else{
-                return false;
-            }
-            
-
+            _repo.AddUser(users);
+            _repo.AddLoan(loans);
         }
+
+        public IEnumerable<BookDTO> GetAllBooks()
+        {
+            return _repo.GetAllBooks();
+        }
+
+        public IEnumerable<BookDTO> GetBooksInLoanOnDate(DateTime loanDate)
+        {
+            IEnumerable<BookDTO> allBooks = _repo.GetAllBooks();
+            IEnumerable<LoanDTO> allLoans = _repo.GetAllLoans();
+            List<BookDTO> selectBooks = new List<BookDTO>();
+            foreach(BookDTO b in allBooks){
+                foreach(LoanDTO l in allLoans){
+                    if(!l.IsReturned && l.BookId == b.Id && (l.DateOfLoan.CompareTo(loanDate) < 0)){
+                        selectBooks.Add(b);
+                    }
+                }
+            }
+            return selectBooks;
+        }
+
+        public BookDTO GetBookById(int id){
+            BookDTO book = _repo.GetBookById(id);
+            if(book == null){
+                throw new NotFoundException("Id not found");
+            }
+            return book;
+        }
+
     }
 }

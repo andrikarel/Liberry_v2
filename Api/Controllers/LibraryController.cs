@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Liberry_v2.Models.DTOs;
 using Liberry_v2.Models.ViewModels;
 using Liberry_v2.Services;
+using Liberry_v2.Services.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Server.Kestrel.Internal.System.Collections.Sequences;
+using Microsoft.EntityFrameworkCore;
 
 namespace Api.Controllers
 {
@@ -12,7 +15,8 @@ namespace Api.Controllers
     public class LibraryController : Controller
     {
         private readonly IBookService _bookService;
-        public LibraryController(IBookService bookService){
+        public LibraryController(IBookService bookService)
+        {
             _bookService = bookService;
         }
 
@@ -21,48 +25,86 @@ namespace Api.Controllers
         [Route("books")]
         public IActionResult GetAllBooks([FromQuery] DateTime LoanDate)
         {
-            return Ok();
+            IEnumerable<BookDTO> books;
+
+            if(LoanDate == null){
+                books = _bookService.GetAllBooks();
+            }else{
+                books = _bookService.GetBooksInLoanOnDate(LoanDate);
+            }
+            return Ok(books);
         }
 
         [HttpPost]
         [Route("books")]
         public IActionResult AddBook([FromBody] List<BookViewModel> book)
         {
-            if(book == null){
+            if (book == null)
+            {
                 return BadRequest();
             }
-            if(!ModelState.IsValid){
+            if (!ModelState.IsValid)
+            {
                 return StatusCode(412);
             }
-            bool valid = _bookService.AddBook(book);
-            if(valid){
-                return StatusCode(201);
+            try{
+                _bookService.AddBook(book);
+            }catch(DbUpdateException e){
+                return StatusCode(503);
             }
-            else{
-                return StatusCode(412);
-            }
+
+            return StatusCode(201);
         }
-        
+
 
         [HttpGet]
         [Route("books/{book_id}")]
         public IActionResult GetBook(int book_id)
         {
-            return Ok();
+            BookDTO book;
+            try{
+                book = _bookService.GetBookById(book_id);
+            }catch(NotFoundException e){
+                return NotFound();
+            }
+            return Ok(book);
         }
 
         [HttpDelete]
         [Route("books/{book_id}")]
         public IActionResult DeleteBook(int book_id)
         {
-            return Ok();
+            try{
+                _bookService.DeleteBook(book_id);
+            }catch(NotFoundException e){
+                return NotFound();
+            }catch(DbUpdateException e){
+                return StatusCode(503);
+            }
+            return StatusCode(204);
         }
 
         [HttpPut]
         [Route("books/{book_id}")]
         public IActionResult UpdateBook([FromBody] BookViewModel book, int book_id)
         {
-            return Ok();
+            if (book == null || book_id == null)
+            {
+                return BadRequest();
+            }
+            if (!ModelState.IsValid)
+            {
+                return StatusCode(412);
+            }
+            try{
+                _bookService.UpdateBook(book, book_id);
+            }catch(DbUpdateException e){
+                return StatusCode(412);
+            }catch(NotFoundException e){
+                return NotFound();
+            }
+
+            return StatusCode(201);
         }
 
         [HttpGet]
@@ -76,23 +118,25 @@ namespace Api.Controllers
         [Route("users")]
         public IActionResult AddUser([FromBody] List<UserViewModel> user)
         {
-            if(user == null){
+            if (user == null)
+            {
                 return BadRequest();
             }
-            if(!ModelState.IsValid){
+            if (!ModelState.IsValid)
+            {
 
                 return StatusCode(412);
             }
-            bool valid = _bookService.AddUser(user);
-            
-            if(valid){
-                return StatusCode(201);
+            try
+            {
+                _bookService.AddUser(user);
             }
-            else{
-          
-
+            catch (DbUpdateException e)
+            {
                 return StatusCode(412);
             }
+
+            return StatusCode(201);
         }
 
         [HttpGet]
@@ -166,7 +210,7 @@ namespace Api.Controllers
         {
             return Ok();
         }
-        
+
         [HttpDelete]
         [Route("books/{book_id}/reviews/{user_id}")]
         [Route("users/{user_id}/reviews/{book_id}")]

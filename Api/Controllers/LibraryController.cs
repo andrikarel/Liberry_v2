@@ -15,22 +15,25 @@ namespace Api.Controllers
     public class LibraryController : Controller
     {
         private readonly IBookService _bookService;
-        public LibraryController(IBookService bookService)
+        private readonly IUserService _userService;
+        public LibraryController(IBookService bookService,IUserService userService)
         {
             _bookService = bookService;
+            _userService = userService;
         }
 
         // GET api/values
         [HttpGet]
         [Route("books")]
-        public IActionResult GetAllBooks([FromQuery] DateTime LoanDate)
+        public IActionResult GetAllBooks([FromQuery] DateTime? LoanDate  = null)
         {
             IEnumerable<BookDTO> books;
-
+            
             if(LoanDate == null){
+                Console.Write("No date");
                 books = _bookService.GetAllBooks();
             }else{
-                books = _bookService.GetBooksInLoanOnDate(LoanDate);
+                books = _bookService.GetBooksInLoanOnDate(LoanDate.Value);
             }
             return Ok(books);
         }
@@ -88,7 +91,7 @@ namespace Api.Controllers
         [Route("books/{book_id}")]
         public IActionResult UpdateBook([FromBody] BookViewModel book, int book_id)
         {
-            if (book == null || book_id == null)
+            if (book == null)
             {
                 return BadRequest();
             }
@@ -109,9 +112,11 @@ namespace Api.Controllers
 
         [HttpGet]
         [Route("users")]
-        public IActionResult GetAllUsers([FromQuery] DateTime LoanDate, [FromQuery] int LoanDuration)
+        public IActionResult GetAllUsers()
         {
-            return Ok();
+            IEnumerable<UserDTO> users;
+            users = _userService.GetAllUsers();
+            return Ok(users);
         }
 
         [HttpPost]
@@ -129,7 +134,7 @@ namespace Api.Controllers
             }
             try
             {
-                _bookService.AddUser(user);
+                _userService.AddUser(user);
             }
             catch (DbUpdateException e)
             {
@@ -143,21 +148,37 @@ namespace Api.Controllers
         [Route("users/{user_id}")]
         public IActionResult GetUser(int user_id)
         {
-            return Ok();
+            UserDTO user;
+            user = _userService.GetUserByID(user_id);
+            return Ok(user);
         }
 
         [HttpDelete]
         [Route("users/{user_id}")]
         public IActionResult DeleteUser(int user_id)
         {
-            return Ok();
+            try{
+                _userService.DeleteUser(user_id);
+            }catch(NotFoundException e){
+                return NotFound();
+            }catch(DbUpdateException e){
+                return StatusCode(503);
+            }
+            return StatusCode(204);
         }
 
         [HttpPut]
         [Route("users/{user_id}")]
         public IActionResult UpdateUser([FromBody] UserViewModel user, int user_id)
         {
-            return Ok();
+            try{
+                _userService.UpdateUser(user,user_id);
+            }catch(NotFoundException e){
+                return NotFound();
+            }catch(DbUpdateException e){
+                return StatusCode(503);
+            }
+            return StatusCode(204);
         }
 
         [HttpGet]

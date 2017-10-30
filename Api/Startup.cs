@@ -28,7 +28,9 @@ namespace Api
         {
             services.AddMvc();
             services.AddTransient<IBookRepository,BookRepository>();
+            services.AddTransient<IUserRepository,UserRepository>();
             services.AddTransient<IBookService,BookService>();
+            services.AddTransient<IUserService,UserService>();
             services.AddDbContext<AppDataContext>(options => options.UseSqlite("Data source=../Repositories/Liberry_v2.db",
             b => b.MigrationsAssembly("Api")));
         }

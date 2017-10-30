@@ -12,6 +12,5 @@ namespace Liberry_v2.Models.Entites
 
         public String ISBN { get; set; }
 
-
     }
 }

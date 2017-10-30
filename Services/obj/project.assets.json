@@ -2723,23 +2723,23 @@
     ]
   },
   "packageFolders": {
-    "/Users/DarrMac/.nuget/packages/": {},
-    "/usr/local/share/dotnet/sdk/NuGetFallbackFolder": {}
+    "/home/andri/.nuget/packages/": {},
+    "/usr/share/dotnet/sdk/NuGetFallbackFolder": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/DarrMac/Desktop/Skóli/HONN/Liberry_v2/Services/Services.csproj",
+      "projectUniqueName": "/home/andri/Documents/Skólinn/honnunHugb/liberryv2/Liberry_v2/Services/Services.csproj",
       "projectName": "Services",
-      "projectPath": "/Users/DarrMac/Desktop/Skóli/HONN/Liberry_v2/Services/Services.csproj",
-      "packagesPath": "/Users/DarrMac/.nuget/packages/",
-      "outputPath": "/Users/DarrMac/Desktop/Skóli/HONN/Liberry_v2/Services/obj/",
+      "projectPath": "/home/andri/Documents/Skólinn/honnunHugb/liberryv2/Liberry_v2/Services/Services.csproj",
+      "packagesPath": "/home/andri/.nuget/packages/",
+      "outputPath": "/home/andri/Documents/Skólinn/honnunHugb/liberryv2/Liberry_v2/Services/obj/",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
-        "/usr/local/share/dotnet/sdk/NuGetFallbackFolder"
+        "/usr/share/dotnet/sdk/NuGetFallbackFolder"
       ],
       "configFilePaths": [
-        "/Users/DarrMac/.nuget/NuGet/NuGet.Config"
+        "/home/andri/.nuget/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "netstandard2.0"
@@ -2750,11 +2750,11 @@
       "frameworks": {
         "netstandard2.0": {
           "projectReferences": {
-            "/Users/DarrMac/Desktop/Skóli/HONN/Liberry_v2/Models/Models.csproj": {
-              "projectPath": "/Users/DarrMac/Desktop/Skóli/HONN/Liberry_v2/Models/Models.csproj"
+            "/home/andri/Documents/Skólinn/honnunHugb/liberryv2/Liberry_v2/Models/Models.csproj": {
+              "projectPath": "/home/andri/Documents/Skólinn/honnunHugb/liberryv2/Liberry_v2/Models/Models.csproj"
             },
-            "/Users/DarrMac/Desktop/Skóli/HONN/Liberry_v2/Repositories/Repositories.csproj": {
-              "projectPath": "/Users/DarrMac/Desktop/Skóli/HONN/Liberry_v2/Repositories/Repositories.csproj"
+            "/home/andri/Documents/Skólinn/honnunHugb/liberryv2/Liberry_v2/Repositories/Repositories.csproj": {
+              "projectPath": "/home/andri/Documents/Skólinn/honnunHugb/liberryv2/Liberry_v2/Repositories/Repositories.csproj"
             }
           }
         }

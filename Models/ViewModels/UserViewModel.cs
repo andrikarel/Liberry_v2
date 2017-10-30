@@ -7,15 +7,15 @@ namespace Liberry_v2.Models.ViewModels
     public class UserViewModel
     {
         [Required]
-        public int vinur_id { get; set; }
+        public int Id { get; set; }
         [Required]
-        public String fornafn  { get; set; }
+        public String FirstName  { get; set; }
         [Required]
-        public String eftirnafn  { get; set; }
+        public String LastName  { get; set; }
       
-        public String heimilisfang {get; set; }
+        public String Address {get; set; }
         [Required]
-        public String netfang { get; set; }
+        public String Email { get; set; }
         
         public List<LoanViewModel> lanasafn {get; set;}
       

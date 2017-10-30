@@ -7,15 +7,15 @@ namespace Liberry_v2.Models.ViewModels
     {
         
         [Required]
-        public int bok_id { get; set; }
+        public int Id { get; set; }
         [Required]
-        public String bok_titill  { get; set; }
+        public String Title  { get; set; }
         [Required]
-        public String fornafn_hofundar { get; set; }
+        public String AuthorFirstName { get; set; }
         [Required]
-        public String eftirnafn_hofundar { get; set; }
+        public String AuthorLastName { get; set; }
         [Required]
-        public DateTime utgafudagur { get; set; }
+        public DateTime PublishDate { get; set; }
         [Required]
         public String ISBN { get; set; }
     

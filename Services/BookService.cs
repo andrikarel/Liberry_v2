@@ -23,41 +23,16 @@ namespace Liberry_v2.Services
             List<BookDTO> toAdd = new List<BookDTO>();
             foreach(BookViewModel b in book){
                 toAdd.Add(new BookDTO{
-                    Id = b.bok_id,
-                    Title = b.bok_titill,
-                    Author = b.fornafn_hofundar + ", " + b.eftirnafn_hofundar,
-                    Published = b.utgafudagur,
+                    Id = b.Id,
+                    Title = b.Title,
+                    Author = b.AuthorFirstName + ", " + b.AuthorLastName,
+                    Published = b.PublishDate,
                     ISBN = b.ISBN
                 });
             }
             _repo.AddBook(toAdd);
         }
-        public void AddUser(List<UserViewModel> user){
-            List<UserDTO> users = new List<UserDTO>();
-            List<LoanDTO> loans = new List<LoanDTO>();
-            foreach(UserViewModel u in user){
-                users.Add(new UserDTO{
-                    Id = u.vinur_id,
-                    Name = u.fornafn + ", " + u.eftirnafn,
-                    Address = u.heimilisfang,
-                    Email = u.netfang,
-                    UserType = "NormalUser"
-                    
-                });
-                Console.Write(u.lanasafn);
-                if(u.lanasafn != null){
-                    foreach(LoanViewModel l in u.lanasafn){
-                        loans.Add(new LoanDTO{
-                            BookId = l.bok_id,
-                            UserId = u.vinur_id,
-                            DateOfLoan = l.bok_lanadagsetning
-                        });
-                    }
-                }
-            }
-            _repo.AddUser(users);
-            _repo.AddLoan(loans);
-        }
+
 
         public IEnumerable<BookDTO> GetAllBooks()
         {
@@ -71,7 +46,7 @@ namespace Liberry_v2.Services
             List<BookDTO> selectBooks = new List<BookDTO>();
             foreach(BookDTO b in allBooks){
                 foreach(LoanDTO l in allLoans){
-                    if(!l.IsReturned && l.BookId == b.Id && (l.DateOfLoan.CompareTo(loanDate) < 0)){
+                    if(l.IsReturned == 0 && l.BookId == b.Id && (l.DateOfLoan.CompareTo(loanDate) < 0)){
                         selectBooks.Add(b);
                     }
                 }
@@ -87,5 +62,14 @@ namespace Liberry_v2.Services
             return book;
         }
 
+        public void DeleteBook(int book_id)
+        {
+            _repo.RemoveBookById(book_id);
+        }
+
+        public void UpdateBook(BookViewModel book, int book_id)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -11,6 +11,9 @@ namespace Liberry_v2.Models.Entites
 
         public DateTime DateOfLoan { get; set; }
 
+        public int IsReturned { get; set; }
+
+
 
     }
 }

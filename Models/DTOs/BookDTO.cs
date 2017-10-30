@@ -14,7 +14,5 @@ namespace Liberry_v2.Models.DTOs
         
         public String ISBN { get; set; }
 
-
-
     }
 }

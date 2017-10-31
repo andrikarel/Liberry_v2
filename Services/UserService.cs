@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Liberry_v2.Models.DTOs;
 using Liberry_v2.Models.ViewModels;
 using Liberry_v2.Repositories;
+using Liberry_v2.Services.Exceptions;
 
 namespace Liberry_v2.Services
 {
@@ -15,23 +16,9 @@ namespace Liberry_v2.Services
             _repo = repo;
         }
 
-        public void AddUser(List<UserViewModel> user)
+        public void AddUser(UserViewModel user)
         {
-            List<UserDTO> users = new List<UserDTO>();
-            foreach (UserViewModel u in user)
-            {
-                users.Add(new UserDTO
-                {
-                    Id = u.Id,
-                    Name = u.FirstName + ", " + u.LastName,
-                    Address = u.Address,
-                    Email = u.Email,
-                    UserType = "NormalUser"
-
-                });
-                _repo.AddUser(users);
-            }
-
+            _repo.AddUser(user);
         }
 
         public void DeleteUser(int user_id)
@@ -44,22 +31,35 @@ namespace Liberry_v2.Services
             return _repo.GetAllUsers();
         }
 
+        public IEnumerable<LoanDTO> GetLoanedBooksByUser(int user_id)
+        {
+            UserDTO user = GetUserByID(user_id);
+            if(user == null){
+                throw new NotFoundException("Id not found");
+            }
+            return _repo.GetLoanedBooksByUser(user_id);
+        }
+
         public UserDTO GetUserByID(int user_id)
         {
             return _repo.GetUserById(user_id);
         }
 
+        public void LoanBookToUser(DateTime loanDate, int user_id, int book_id)
+        {
+            UserDTO user = GetUserByID(user_id);
+            //Same for book
+            //move to loanservice so we can check shit for both
+            _repo.LoanBookToUser(loanDate, user_id, book_id);
+        }
+
         public void UpdateUser(UserViewModel user,int user_id)
         {
-            UserDTO updatedUser = new UserDTO{
-                Id = user_id,
-                Name = user.FirstName + ", " + user.LastName,
-                Address = user.Address,
-                Email = user.Email,
-                UserType = "NormalUser"
-
-            };
-            _repo.UpdateUser(updatedUser);
+            UserDTO u = GetUserByID(user_id);
+            if(u == null){
+                throw new NotFoundException("Id not found");
+            }
+            _repo.UpdateUser(user, user_id);
                 
 
         }

@@ -12593,23 +12593,23 @@
     ]
   },
   "packageFolders": {
-    "/home/andri/.nuget/packages/": {},
-    "/usr/share/dotnet/sdk/NuGetFallbackFolder": {}
+    "/Users/DarrMac/.nuget/packages/": {},
+    "/usr/local/share/dotnet/sdk/NuGetFallbackFolder": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/home/andri/Documents/Skólinn/honnunHugb/liberryv2/Liberry_v2/Api/Api.csproj",
+      "projectUniqueName": "/Users/DarrMac/Desktop/Skóli/HONN/Liberry_v2/Api/Api.csproj",
       "projectName": "Api",
-      "projectPath": "/home/andri/Documents/Skólinn/honnunHugb/liberryv2/Liberry_v2/Api/Api.csproj",
-      "packagesPath": "/home/andri/.nuget/packages/",
-      "outputPath": "/home/andri/Documents/Skólinn/honnunHugb/liberryv2/Liberry_v2/Api/obj/",
+      "projectPath": "/Users/DarrMac/Desktop/Skóli/HONN/Liberry_v2/Api/Api.csproj",
+      "packagesPath": "/Users/DarrMac/.nuget/packages/",
+      "outputPath": "/Users/DarrMac/Desktop/Skóli/HONN/Liberry_v2/Api/obj/",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
-        "/usr/share/dotnet/sdk/NuGetFallbackFolder"
+        "/usr/local/share/dotnet/sdk/NuGetFallbackFolder"
       ],
       "configFilePaths": [
-        "/home/andri/.nuget/NuGet/NuGet.Config"
+        "/Users/DarrMac/.nuget/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "netcoreapp2.0"
@@ -12620,14 +12620,14 @@
       "frameworks": {
         "netcoreapp2.0": {
           "projectReferences": {
-            "/home/andri/Documents/Skólinn/honnunHugb/liberryv2/Liberry_v2/Models/Models.csproj": {
-              "projectPath": "/home/andri/Documents/Skólinn/honnunHugb/liberryv2/Liberry_v2/Models/Models.csproj"
+            "/Users/DarrMac/Desktop/Skóli/HONN/Liberry_v2/Models/Models.csproj": {
+              "projectPath": "/Users/DarrMac/Desktop/Skóli/HONN/Liberry_v2/Models/Models.csproj"
             },
-            "/home/andri/Documents/Skólinn/honnunHugb/liberryv2/Liberry_v2/Services/Services.csproj": {
-              "projectPath": "/home/andri/Documents/Skólinn/honnunHugb/liberryv2/Liberry_v2/Services/Services.csproj"
+            "/Users/DarrMac/Desktop/Skóli/HONN/Liberry_v2/Services/Services.csproj": {
+              "projectPath": "/Users/DarrMac/Desktop/Skóli/HONN/Liberry_v2/Services/Services.csproj"
             },
-            "/home/andri/Documents/Skólinn/honnunHugb/liberryv2/Liberry_v2/Repositories/Repositories.csproj": {
-              "projectPath": "/home/andri/Documents/Skólinn/honnunHugb/liberryv2/Liberry_v2/Repositories/Repositories.csproj"
+            "/Users/DarrMac/Desktop/Skóli/HONN/Liberry_v2/Repositories/Repositories.csproj": {
+              "projectPath": "/Users/DarrMac/Desktop/Skóli/HONN/Liberry_v2/Repositories/Repositories.csproj"
             }
           }
         }

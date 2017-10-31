@@ -16,30 +16,26 @@ namespace Liberry_v2.Repositories{
             _db = db;
         }
 
-        public void AddBook(List<BookDTO> book)
+        public void AddBook(BookViewModel b)
         {
-            foreach(BookDTO b in book){
-                _db.Books.Add(new Book {
-                    Id = b.Id,
-                    Title = b.Title,
-                    Author = b.Author,
-                    Published = b.Published,
-                    ISBN = b.ISBN});
-            }
+            _db.Books.Add(new Book {
+                Title = b.Title,
+                Author = b.Author,
+                Published = b.Published,
+                ISBN = b.ISBN});
+            
             _db.SaveChanges();
             
         }
 
-        public void AddLoan(List<LoanDTO> loans)
+        public void AddLoan(LoanViewModel l)
         {
-            foreach(LoanDTO l in loans){
-                _db.Loans.Add(new Loan {
-                    BookId = l.BookId,
-                    UserId = l.UserId,
-                    DateOfLoan = l.DateOfLoan,
-                    IsReturned = l.IsReturned
-                });
-            }
+            _db.Loans.Add(new Loan {
+                BookId = l.BookId,
+                UserId = l.UserId,
+                DateOfLoan = l.DateOfLoan,
+                IsReturned = false
+            });
             _db.SaveChanges();
         }
 
@@ -90,32 +86,25 @@ namespace Liberry_v2.Repositories{
 
         public void DeleteBook(int bookId)
         {
-            Book book = (from b in _db.Books
-                        where b.Id == bookId
-                        select new Book{
-                            Id = b.Id,
-                            Title = b.Title,
-                            Author = b.Author,
-                            Published = b.Published,
-                            ISBN = b.ISBN
-                        }).FirstOrDefault();
-            _db.Books.Remove(book);
-        }
-
-        public void UpdateBook(BookViewModel book, int bookId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void RemoveBookById(int book_id)
-        {
             var bookToRemove = (from b in _db.Books
-                                where b.Id == book_id
+                                where b.Id == bookId
                                 select b
                                 ).SingleOrDefault();
             _db.Books.Remove(bookToRemove);
             _db.SaveChanges();
-            
         }
+
+        public void UpdateBook(BookViewModel updatedBook, int bookId)
+        {
+            Book toUpdate = (from b in _db.Books
+                            where b.Id == bookId
+                            select b).FirstOrDefault();
+            toUpdate.Title = updatedBook.Title;
+            toUpdate.Author = updatedBook.Author;
+            toUpdate.Published = updatedBook.Published;
+            toUpdate.ISBN = updatedBook.ISBN;
+            _db.SaveChanges();
+        }
+
     }
 }

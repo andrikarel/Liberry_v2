@@ -6,12 +6,9 @@ namespace Liberry_v2.Models.DTOs
     {
       
         public int Id { get; set; }
-       
         public String Title  { get; set; }
-        
         public String Author { get; set; }
-        public DateTime Published { get; set; }
-        
+        public DateTime Published { get; set; }        
         public String ISBN { get; set; }
 
     }

@@ -40,7 +40,7 @@ namespace Api.Controllers
 
         [HttpPost]
         [Route("books")]
-        public IActionResult AddBook([FromBody] List<BookViewModel> book)
+        public IActionResult AddBook([FromBody] BookViewModel book)
         {
             if (book == null)
             {
@@ -121,7 +121,7 @@ namespace Api.Controllers
 
         [HttpPost]
         [Route("users")]
-        public IActionResult AddUser([FromBody] List<UserViewModel> user)
+        public IActionResult AddUser([FromBody] UserViewModel user)
         {
             if (user == null)
             {
@@ -185,14 +185,25 @@ namespace Api.Controllers
         [Route("users/{user_id}/books")]
         public IActionResult GetLoanedBooksByUser(int user_id)
         {
-            return Ok();
+            IEnumerable<LoanDTO> books;
+            try{
+                books = _userService.GetLoanedBooksByUser(user_id);
+            }catch(NotFoundException e){
+                return NotFound();
+            }
+            return Ok(books);
         }
 
         [HttpPost]
         [Route("users/{user_id}/books/{book_id}")]
         public IActionResult LoanBookToUser([FromBody] DateTime loanDate, int user_id, int book_id)
         {
-            return Ok();
+            try{
+                _userService.LoanBookToUser(loanDate, user_id, book_id);
+            }catch(NotFoundException e){
+                return NotFound();
+            }
+            return StatusCode(201);
         }
 
         [HttpDelete]

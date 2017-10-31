@@ -12,9 +12,8 @@ namespace Liberry_v2.Services
         IEnumerable<BookDTO> GetAllBooks();
         IEnumerable<BookDTO> GetBooksInLoanOnDate(DateTime loanDate);
         BookDTO GetBookById(int id);
-        void AddBook(List<BookViewModel> book);
-        void DeleteBook(int book_id);
-        void UpdateBook(BookViewModel book, int book_id);
-        
+        void AddBook(BookViewModel book);
+        void DeleteBook(int bookId);
+        void UpdateBook(BookViewModel book, int bookId);
     }
 }

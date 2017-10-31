@@ -10,11 +10,10 @@ namespace Liberry_v2.Repositories{
         
         IEnumerable<LoanDTO> GetAllLoans();
         BookDTO GetBookById(int id);
-        void AddBook(List<BookDTO> bookDTO);
+        void AddBook(BookViewModel bookDTO);
        
-        void AddLoan(List<LoanDTO> loans);
+        void AddLoan(LoanViewModel loans);
         void DeleteBook(int bookId);
         void UpdateBook(BookViewModel book, int bookId);
-        void RemoveBookById(int book_id);
     }
 }

@@ -18,21 +18,10 @@ namespace Liberry_v2.Services
             _repo = repo;
         }
 
-        public void AddBook(List<BookViewModel> book)
+        public void AddBook(BookViewModel book)
         {
-            List<BookDTO> toAdd = new List<BookDTO>();
-            foreach(BookViewModel b in book){
-                toAdd.Add(new BookDTO{
-                    Id = b.Id,
-                    Title = b.Title,
-                    Author = b.AuthorFirstName + ", " + b.AuthorLastName,
-                    Published = b.PublishDate,
-                    ISBN = b.ISBN
-                });
-            }
-            _repo.AddBook(toAdd);
+            _repo.AddBook(book);
         }
-
 
         public IEnumerable<BookDTO> GetAllBooks()
         {
@@ -46,7 +35,7 @@ namespace Liberry_v2.Services
             List<BookDTO> selectBooks = new List<BookDTO>();
             foreach(BookDTO b in allBooks){
                 foreach(LoanDTO l in allLoans){
-                    if(l.IsReturned == 0 && l.BookId == b.Id && (l.DateOfLoan.CompareTo(loanDate) < 0)){
+                    if(!l.IsReturned && l.BookId == b.Id && (l.DateOfLoan.CompareTo(loanDate) < 0)){
                         selectBooks.Add(b);
                     }
                 }
@@ -54,22 +43,29 @@ namespace Liberry_v2.Services
             return selectBooks;
         }
 
-        public BookDTO GetBookById(int id){
-            BookDTO book = _repo.GetBookById(id);
+        public BookDTO GetBookById(int bookId){
+            BookDTO book = _repo.GetBookById(bookId);
             if(book == null){
                 throw new NotFoundException("Id not found");
             }
             return book;
         }
 
-        public void DeleteBook(int book_id)
-        {
-            _repo.RemoveBookById(book_id);
+        public void DeleteBook(int bookId){
+
+            // Throws not found if the id doesn't exist
+            BookDTO book = GetBookById(bookId);
+
+            _repo.DeleteBook(bookId);
         }
 
-        public void UpdateBook(BookViewModel book, int book_id)
+        public void UpdateBook(BookViewModel book, int bookId)
         {
-            throw new NotImplementedException();
+
+            // Throws not found if the id doesn't exist
+            BookDTO b = GetBookById(bookId);
+
+            _repo.UpdateBook(book, bookId);
         }
     }
 }

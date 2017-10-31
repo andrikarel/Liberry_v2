@@ -34,20 +34,16 @@ namespace Liberry_v2.Repositories
             return users;
 
         }
-        public void AddUser(List<UserDTO> users)
+        public void AddUser(UserViewModel u)
         {
-            foreach (UserDTO u in users)
+            _db.Users.Add(new User
             {
-                _db.Users.Add(new User
-                {
-                    Id = u.Id,
-                    Address = u.Address,
-                    Email = u.Email,
-                    Name = u.Name,
-                    UserType = u.UserType
-                });
-            }
-            _db.SaveChanges();
+                Address = u.Address,
+                Email = u.Email,
+                Name = u.Name,
+                UserType = u.UserType
+            });
+        _db.SaveChanges();
         }
 
         public UserDTO GetUserById(int user_id)
@@ -70,30 +66,45 @@ namespace Liberry_v2.Repositories
             var userToRemove = (from u in _db.Users
                                 where u.Id == user_id
                                 select u
-                                ).SingleOrDefault();
+                                ).FirstOrDefault();
             _db.Users.Remove(userToRemove);
             _db.SaveChanges();
 
         }
 
-        public void UpdateUser(UserDTO updatedUser)
+        public void UpdateUser(UserViewModel updatedUser, int userId)
         {
             User toUpdate = (from u in _db.Users
-                            where u.Id == updatedUser.Id
-                            select new User{
-                                Id = updatedUser.Id,
-                                Address = updatedUser.Address,
-                                Email = updatedUser.Email,
-                                Name = updatedUser.Name,
-                                UserType = updatedUser.UserType
-                            }).SingleOrDefault();
-            if (toUpdate != null)
-            {
-                DeleteUser(toUpdate.Id);
-                _db.Users.Add(toUpdate);
-                _db.SaveChanges();
-            }
+                            where u.Id == userId
+                            select u).FirstOrDefault();
+            toUpdate.Name = updatedUser.Name;
+            toUpdate.Address = updatedUser.Address;
+            toUpdate.UserType = updatedUser.UserType;
+            toUpdate.Email = updatedUser.Email;
+            _db.SaveChanges();
         }
 
+        public IEnumerable<LoanDTO> GetLoanedBooksByUser(int userId)
+        {
+            List<LoanDTO> loans = (from l in _db.Loans
+                                    where l.UserId == userId
+                                    select new LoanDTO{
+                                        Id = l.Id,
+                                        UserId = l.UserId,
+                                        BookId = l.BookId,
+                                        DateOfLoan = l.DateOfLoan
+                                    }).ToList();
+            return loans;
+        }
+
+        public void LoanBookToUser(DateTime loanDate, int user_id, int book_id)
+        {
+            _db.Loans.Add(new Loan{
+                UserId = user_id,
+                BookId = book_id,
+                DateOfLoan = loanDate
+            });
+            _db.SaveChanges();
+        }
     }
 }

@@ -7,12 +7,11 @@ namespace Liberry_v2.Models.ViewModels
     {
         
         [Required]
-        public int vinur_id { get; set; }
+        public int UserId { get; set; }
         [Required]
-        public int bok_id  { get; set; }
-
+        public int BookId  { get; set; }
         [Required]
-        public DateTime bok_lanadagsetning { get; set; }
+        public DateTime DateOfLoan { get; set; }
 
 
     }

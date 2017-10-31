@@ -3,6 +3,7 @@ using System.Collections;
 using Liberry_v2.Models.DTOs;
 using Liberry_v2.Models.ViewModels;
 using System;
+using Liberry_v2.Models.Entites;
 
 namespace Liberry_v2.Services
 {
@@ -13,7 +14,5 @@ namespace Liberry_v2.Services
         UserDTO GetUserByID(int user_id);
         void DeleteUser(int user_id);
         void UpdateUser(UserViewModel user, int user_id);
-        IEnumerable<LoanDTO> GetLoanedBooksByUser(int user_id);
-        void LoanBookToUser(DateTime loanDate, int user_id, int book_id);
     }
 }

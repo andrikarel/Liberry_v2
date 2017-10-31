@@ -92,7 +92,8 @@ namespace Liberry_v2.Repositories
                                         Id = l.Id,
                                         UserId = l.UserId,
                                         BookId = l.BookId,
-                                        DateOfLoan = l.DateOfLoan
+                                        DateOfLoan = l.DateOfLoan,
+                                        IsReturned = l.IsReturned
                                     }).ToList();
             return loans;
         }
@@ -105,6 +106,103 @@ namespace Liberry_v2.Repositories
                 DateOfLoan = loanDate
             });
             _db.SaveChanges();
+        }
+
+        public void ReturnBookFromUser(int user_id, int book_id)
+        {
+            Loan loan = (from l in _db.Loans
+                        where l.UserId == user_id
+                        && l.BookId == book_id
+                        select l).FirstOrDefault();
+            loan.IsReturned = true;
+            _db.SaveChanges();
+        }
+
+        public void UpdateLoanByUser(LoanViewModel updatedLoan, int user_id, int book_id)
+        {
+            Loan loan = (from l in _db.Loans
+                        where l.UserId == user_id
+                        && l.BookId == book_id
+                        select l).FirstOrDefault();
+            loan.DateOfLoan = updatedLoan.DateOfLoan;
+            _db.SaveChanges();
+        }
+
+        public IEnumerable<ReviewDTO> GetReviewsByUser(int user_id)
+        {
+            List<ReviewDTO> reviews = (from r in _db.Reviews
+                                            where r.UserId == user_id
+                                            select new ReviewDTO{
+                                                ID = r.ID,
+                                                BookId = r.BookId,
+                                                UserId = r.UserId,
+                                                DateWritten = r.DateWritten,
+                                                Rating = r.Rating
+                                            }).ToList();
+            return reviews;
+        }
+
+        public ReviewDTO GetReview(int user_id, int book_id)
+        {
+            ReviewDTO review = (from r in _db.Reviews
+                                where r.UserId == user_id
+                                && r.BookId == user_id
+                                select new ReviewDTO{
+                                    ID = r.ID,
+                                    BookId = r.BookId,
+                                    UserId = r.UserId,
+                                    DateWritten = r.DateWritten,
+                                    Rating = r.Rating
+                                }).FirstOrDefault();
+            return review;
+        }
+
+        public void AddReview(ReviewViewModel review, int user_id, int book_id)
+        {
+            _db.Reviews.Add(new Review{
+                UserId = user_id,
+                BookId = book_id,
+                DateWritten = review.DateWritten,
+                Rating = review.Rating
+            });
+            _db.SaveChanges();
+        }
+
+        public void DeleteReview(int user_id, int book_id)
+        {
+            var reviewToRemove = (from r in _db.Reviews
+                                where r.UserId == user_id
+                                && r.BookId == book_id
+                                select r
+                                ).FirstOrDefault();
+            _db.Reviews.Remove(reviewToRemove);
+            _db.SaveChanges();
+
+        }
+
+        public void UpdateReview(ReviewViewModel review, int user_id, int book_id)
+        {
+            Review toUpdate = (from r in _db.Reviews
+                            where r.UserId == user_id
+                            && r.BookId == book_id
+                            select r).FirstOrDefault();
+            toUpdate.DateWritten = review.DateWritten;
+            toUpdate.Rating = review.Rating;
+            _db.SaveChanges();
+        }
+
+        public IEnumerable<ReviewDTO> GetAllReviews()
+        {
+            IEnumerable<ReviewDTO> reviews = (from r in _db.Reviews
+                                                select new ReviewDTO{
+                                                    ID = r.ID,
+                                                    UserId = r.UserId,
+                                                    BookId = r.BookId,
+                                                    DateWritten = r.DateWritten,
+                                                    Rating = r.Rating
+                                                }).ToList();
+            return reviews;
+                
         }
     }
 }

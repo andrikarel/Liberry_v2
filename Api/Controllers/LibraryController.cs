@@ -20,7 +20,7 @@ namespace Api.Controllers
         private readonly ILoanService _loanService;
         private readonly IReviewService _reviewService;
         private readonly IRecommendationService _recommendationService;
-        public LibraryController(IBookService bookService,IUserService userService,ILoanService loanService,IReviewService reviewService, IRecommendationService recommendationService)
+        public LibraryController(IBookService bookService, IUserService userService, ILoanService loanService, IReviewService reviewService, IRecommendationService recommendationService)
         {
             _bookService = bookService;
             _userService = userService;
@@ -32,14 +32,17 @@ namespace Api.Controllers
         // GET api/values
         [HttpGet]
         [Route("books")]
-        public IActionResult GetAllBooks([FromQuery] DateTime? LoanDate  = null)
+        public IActionResult GetAllBooks([FromQuery] DateTime? LoanDate = null)
         {
             IEnumerable<BookDTO> books;
-            
-            if(LoanDate == null){
+
+            if (LoanDate == null)
+            {
                 Console.Write("No date");
                 books = _bookService.GetAllBooks();
-            }else{
+            }
+            else
+            {
                 books = _bookService.GetBooksInLoanOnDate(LoanDate.Value);
             }
             return Ok(books);
@@ -57,9 +60,12 @@ namespace Api.Controllers
             {
                 return StatusCode(412);
             }
-            try{
+            try
+            {
                 _bookService.AddBook(book);
-            }catch(DbUpdateException e){
+            }
+            catch (DbUpdateException e)
+            {
                 return StatusCode(503);
             }
 
@@ -72,9 +78,12 @@ namespace Api.Controllers
         public IActionResult GetBook(int book_id)
         {
             BookDTO book;
-            try{
+            try
+            {
                 book = _bookService.GetBookById(book_id);
-            }catch(NotFoundException e){
+            }
+            catch (NotFoundException e)
+            {
                 return NotFound();
             }
             return Ok(book);
@@ -84,11 +93,16 @@ namespace Api.Controllers
         [Route("books/{book_id}")]
         public IActionResult DeleteBook(int book_id)
         {
-            try{
+            try
+            {
                 _bookService.DeleteBook(book_id);
-            }catch(NotFoundException e){
+            }
+            catch (NotFoundException e)
+            {
                 return NotFound();
-            }catch(DbUpdateException e){
+            }
+            catch (DbUpdateException e)
+            {
                 return StatusCode(503);
             }
             return StatusCode(204);
@@ -106,11 +120,16 @@ namespace Api.Controllers
             {
                 return StatusCode(412);
             }
-            try{
+            try
+            {
                 _bookService.UpdateBook(book, book_id);
-            }catch(DbUpdateException e){
+            }
+            catch (DbUpdateException e)
+            {
                 return StatusCode(412);
-            }catch(NotFoundException e){
+            }
+            catch (NotFoundException e)
+            {
                 return NotFound();
             }
 
@@ -164,11 +183,16 @@ namespace Api.Controllers
         [Route("users/{user_id}")]
         public IActionResult DeleteUser(int user_id)
         {
-            try{
+            try
+            {
                 _userService.DeleteUser(user_id);
-            }catch(NotFoundException e){
+            }
+            catch (NotFoundException e)
+            {
                 return NotFound();
-            }catch(DbUpdateException e){
+            }
+            catch (DbUpdateException e)
+            {
                 return StatusCode(503);
             }
             return StatusCode(204);
@@ -178,11 +202,25 @@ namespace Api.Controllers
         [Route("users/{user_id}")]
         public IActionResult UpdateUser([FromBody] UserViewModel user, int user_id)
         {
-            try{
-                _userService.UpdateUser(user,user_id);
-            }catch(NotFoundException e){
+            if (user == null)
+            {
+                return BadRequest();
+            }
+            if (!ModelState.IsValid)
+            {
+
+                return StatusCode(412);
+            }
+            try
+            {
+                _userService.UpdateUser(user, user_id);
+            }
+            catch (NotFoundException e)
+            {
                 return NotFound();
-            }catch(DbUpdateException e){
+            }
+            catch (DbUpdateException e)
+            {
                 return StatusCode(503);
             }
             return StatusCode(200);
@@ -193,9 +231,12 @@ namespace Api.Controllers
         public IActionResult GetLoanedBooksByUser(int user_id)
         {
             IEnumerable<LoanDTO> books;
-            try{
+            try
+            {
                 books = _loanService.GetLoanedBooksByUser(user_id);
-            }catch(NotFoundException e){
+            }
+            catch (NotFoundException e)
+            {
                 return NotFound();
             }
             return Ok(books);
@@ -205,12 +246,16 @@ namespace Api.Controllers
         [Route("users/{user_id}/books/{book_id}")]
         public IActionResult LoanBookToUser(int user_id, int book_id, [FromBody] DateTime? loanDate = null)
         {
-            if(loanDate == null){
+            if (loanDate == null)
+            {
                 loanDate = DateTime.Now;
             }
-            try{
+            try
+            {
                 _loanService.LoanBookToUser(loanDate.Value, user_id, book_id);
-            }catch(NotFoundException e){
+            }
+            catch (NotFoundException e)
+            {
                 return NotFound();
             }
             return StatusCode(201);
@@ -220,9 +265,12 @@ namespace Api.Controllers
         [Route("users/{user_id}/books/{book_id}")]
         public IActionResult ReturnBookFromUser(int user_id, int book_id)
         {
-            try{
+            try
+            {
                 _loanService.ReturnBookFromUser(user_id, book_id);
-            }catch(NotFoundException e){
+            }
+            catch (NotFoundException e)
+            {
                 return NotFound();
             }
             return StatusCode(204);
@@ -232,11 +280,23 @@ namespace Api.Controllers
         [Route("users/{user_id}/books/{book_id}")]
         public IActionResult UpdateLoanByUser(int user_id, int book_id, [FromBody] LoanViewModel loan)
         {
+            if (loan == null)
+            {
+                return BadRequest();
+            }
+            if (!ModelState.IsValid)
+            {
+
+                return StatusCode(412);
+            }
             loan.BookId = book_id;
             loan.UserId = user_id;
-            try{
+            try
+            {
                 _loanService.UpdateLoanByUser(loan, user_id, book_id);
-            }catch(NotFoundException e){
+            }
+            catch (NotFoundException e)
+            {
                 return NotFound();
             }
             return StatusCode(200);
@@ -247,9 +307,12 @@ namespace Api.Controllers
         public IActionResult GetReviewsByUser(int user_id)
         {
             IEnumerable<ReviewDTO> reviews;
-            try{
+            try
+            {
                 reviews = _reviewService.GetReviewsByUser(user_id);
-            }catch(NotFoundException e){
+            }
+            catch (NotFoundException e)
+            {
                 return NotFound();
             }
             return Ok(reviews);
@@ -261,9 +324,12 @@ namespace Api.Controllers
         public IActionResult GetReview(int user_id, int book_id)
         {
             ReviewDTO review;
-            try{
+            try
+            {
                 review = _reviewService.GetReview(user_id, book_id);
-            }catch(NotFoundException e){
+            }
+            catch (NotFoundException e)
+            {
                 return NotFound();
             }
             return Ok(review);
@@ -274,12 +340,24 @@ namespace Api.Controllers
         [Route("users/{user_id}/reviews/{book_id}")]
         public IActionResult AddReview([FromBody] ReviewViewModel review, int user_id, int book_id)
         {
+            if (review == null)
+            {
+                return BadRequest();
+            }
+            if (!ModelState.IsValid)
+            {
+
+                return StatusCode(412);
+            }
             review.UserId = user_id;
             review.BookId = book_id;
             review.DateWritten = DateTime.Now;
-            try{
+            try
+            {
                 _reviewService.AddReview(review, user_id, book_id);
-            }catch(NotFoundException e){
+            }
+            catch (NotFoundException e)
+            {
                 return NotFound();
             }
             return StatusCode(201);
@@ -290,11 +368,16 @@ namespace Api.Controllers
         [Route("users/{user_id}/reviews/{book_id}")]
         public IActionResult DeleteReview(int user_id, int book_id)
         {
-            try{
+            try
+            {
                 _reviewService.DeleteReview(user_id, book_id);
-            }catch(NotFoundException e){
+            }
+            catch (NotFoundException e)
+            {
                 return NotFound();
-            }catch(DbUpdateException e){
+            }
+            catch (DbUpdateException e)
+            {
                 return StatusCode(503);
             }
             return StatusCode(204);
@@ -305,12 +388,24 @@ namespace Api.Controllers
         [Route("users/{user_id}/reviews/{book_id}")]
         public IActionResult UpdateReview([FromBody] ReviewViewModel review, int user_id, int book_id)
         {
+            if (review == null)
+            {
+                return BadRequest();
+            }
+            if (!ModelState.IsValid)
+            {
+
+                return StatusCode(412);
+            }
             review.UserId = user_id;
             review.BookId = book_id;
             review.DateWritten = DateTime.Now;
-            try{
+            try
+            {
                 _reviewService.UpdateReview(review, user_id, book_id);
-            }catch(NotFoundException e){
+            }
+            catch (NotFoundException e)
+            {
                 return NotFound();
             }
             return StatusCode(200);
@@ -329,9 +424,12 @@ namespace Api.Controllers
         public IActionResult GetReviewsForBook(int book_id)
         {
             IEnumerable<ReviewDTO> reviews;
-            try{
+            try
+            {
                 reviews = _reviewService.GetReviewsForBook(book_id);
-            }catch(NotFoundException e){
+            }
+            catch (NotFoundException e)
+            {
                 return NotFound();
             }
             return Ok(reviews);
@@ -342,9 +440,12 @@ namespace Api.Controllers
         public IActionResult GetRecommendations(int user_id)
         {
             IEnumerable<BookDTO> recommendedBooks;
-            try{
+            try
+            {
                 recommendedBooks = _recommendationService.GetRecommendations(user_id);
-            }catch(NotFoundException e){
+            }
+            catch (NotFoundException e)
+            {
                 return NotFound();
             }
             return Ok(recommendedBooks);

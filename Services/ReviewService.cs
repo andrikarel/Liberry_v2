@@ -79,7 +79,7 @@ namespace Liberry_v2.Services
             if(book == null){
                 throw new NotFoundException("Id not found");
             }
-            return _repo.GetReviewsByBook(book_id);
+            return _repo.GetReviewsForBook(book_id);
         }
 
         public void UpdateReview(ReviewViewModel review, int user_id, int book_id)

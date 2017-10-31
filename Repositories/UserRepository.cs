@@ -204,5 +204,19 @@ namespace Liberry_v2.Repositories
             return reviews;
                 
         }
+
+        public IEnumerable<ReviewDTO> GetReviewsForBook(int book_id)
+        {
+            List<ReviewDTO> reviews = (from r in _db.Reviews
+                                            where r.BookId == book_id
+                                            select new ReviewDTO{
+                                                ID = r.ID,
+                                                BookId = r.BookId,
+                                                UserId = r.UserId,
+                                                DateWritten = r.DateWritten,
+                                                Rating = r.Rating
+                                            }).ToList();
+            return reviews;
+        }
     }
 }

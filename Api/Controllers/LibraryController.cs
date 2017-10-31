@@ -19,12 +19,14 @@ namespace Api.Controllers
         private readonly IUserService _userService;
         private readonly ILoanService _loanService;
         private readonly IReviewService _reviewService;
-        public LibraryController(IBookService bookService,IUserService userService,ILoanService loanService,IReviewService reviewService)
+        private readonly IRecommendationService _recommendationService;
+        public LibraryController(IBookService bookService,IUserService userService,ILoanService loanService,IReviewService reviewService, IRecommendationService recommendationService)
         {
             _bookService = bookService;
             _userService = userService;
             _loanService = loanService;
             _reviewService = reviewService;
+            _recommendationService = recommendationService;
         }
 
         // GET api/values
@@ -335,11 +337,11 @@ namespace Api.Controllers
             return Ok(reviews);
         }
 
-        [HttpGet]
-        [Route("users/{user_id}/recommendation")]
-        public IActionResult GetRecommendations(int user_id)
-        {
-            return Ok();
-        }
+        // [HttpGet]
+        // [Route("users/{user_id}/recommendation")]
+        // public IActionResult GetRecommendations(int user_id)
+        // {
+        //     Book recommendedBook = _recommendationService.GetRecommendations(user_id);
+        // }
     }
 }

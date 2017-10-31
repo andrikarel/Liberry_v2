@@ -337,11 +337,17 @@ namespace Api.Controllers
             return Ok(reviews);
         }
 
-        // [HttpGet]
-        // [Route("users/{user_id}/recommendation")]
-        // public IActionResult GetRecommendations(int user_id)
-        // {
-        //     Book recommendedBook = _recommendationService.GetRecommendations(user_id);
-        // }
+        [HttpGet]
+        [Route("users/{user_id}/recommendation")]
+        public IActionResult GetRecommendations(int user_id)
+        {
+            IEnumerable<BookDTO> recommendedBooks;
+            try{
+                recommendedBooks = _recommendationService.GetRecommendations(user_id);
+            }catch(NotFoundException e){
+                return NotFound();
+            }
+            return Ok(recommendedBooks);
+        }
     }
 }

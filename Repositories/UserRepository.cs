@@ -218,5 +218,20 @@ namespace Liberry_v2.Repositories
                                             }).ToList();
             return reviews;
         }
+
+        public LoanDTO GetLoan(int user_id, int book_id)
+        {
+            LoanDTO loan = (from l in _db.Loans
+                                where l.UserId == user_id
+                                && l.BookId == user_id
+                                select new LoanDTO{
+                                    Id = l.Id,
+                                    BookId = l.BookId,
+                                    UserId = l.UserId,
+                                    DateOfLoan = l.DateOfLoan,
+                                    IsReturned = l.IsReturned
+                                }).FirstOrDefault();
+            return loan;
+        }
     }
 }

@@ -24,6 +24,7 @@ namespace Liberry_v2.Repositories{
         void UpdateReview(ReviewViewModel review, int user_id, int book_id);
         IEnumerable<ReviewDTO> GetAllReviews();
         IEnumerable<ReviewDTO> GetReviewsForBook(int book_id);
+        LoanDTO GetLoan(int user_id, int book_id);
     }
 
 }
